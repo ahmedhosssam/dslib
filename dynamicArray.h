@@ -71,8 +71,8 @@ class dynamicArray {
 		}
 
 		T& getAt(size_t i) {
-			assert(i >= size || i < 0);
-			return this[i];
+			assert(i < size && i >= 0);
+			return array[i];
 		}
 
 		void print() {
@@ -123,6 +123,8 @@ class dynamicArray {
 			if (size == capacity) {
 				resize();
 			}
+
+            // shifting
 			for (size_t i = size; i > index; i--) {
 				array[i] = array[i-1];
 			}
