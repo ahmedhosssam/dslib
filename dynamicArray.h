@@ -1,3 +1,6 @@
+#ifndef DYNAMICARRAY_H
+#define DYNAMICARRAY_H
+
 #include <iostream>
 #include <algorithm>
 #include <cassert>
@@ -9,8 +12,7 @@ using namespace std;
 
     dynamicArray(int initCap = 0);  // constructor
     dynamicArray(const dynamicArray& other); // copy constructor
-    void resize();
-    T& getElementAt(size_t i);
+    T& getAt(size_t i);
     void print();
     size_t getSize() const;
 	size_t getCap() const; // get capacity
@@ -25,7 +27,7 @@ using namespace std;
 
 template <typename T>
 class dynamicArray {
-	private:
+	protected:
 		size_t size = 0;
 		size_t capacity = 5;
 		T *array;
@@ -44,6 +46,15 @@ class dynamicArray {
 			array = newArr;
 		}
 
+        T binarySearch(T target, size_t i, size_t j) {      // O(log n)
+            if (i >= j) return i;
+            size_t m = (i + j) / 2;
+            T x = getAt(m);
+            if (x > target) return binarySearch(target, i, m-1);
+            if (x < target) return binarySearch(target, m+1, j);
+            return m;
+        }
+
 	public:
 		dynamicArray(int initCap = 0) : capacity(initCap) {
 			array = new T[capacity];
@@ -59,7 +70,7 @@ class dynamicArray {
 			}
 		}
 
-		T& getElementAt(size_t i) {
+		T& getAt(size_t i) {
 			assert(i >= size || i < 0);
 			return this[i];
 		}
@@ -162,3 +173,5 @@ class dynamicArray {
 			delete[] array;
 		}
 };
+
+#endif

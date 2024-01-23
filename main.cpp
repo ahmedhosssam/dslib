@@ -1,5 +1,6 @@
 #include <iostream>
 #include "dynamicArray.h"
+#include "sortedDynamicArray.h"
 using namespace std;
 
 int main() {
