@@ -97,6 +97,7 @@ class dynamicArray {
         }
 
         void merge_sort(dynamicArray<T>* arr, int a, int b = -1) {
+            size_t initSize = arr->getSize();
             if (b == -1) {
                 b = arr->getSize();
             }
@@ -118,10 +119,10 @@ class dynamicArray {
                     } else {
                         arr->insertAt(R.getAt(j), a, false);
                         j++;
-                        cout << "j = " << j << endl;
                     }
                     a++;
                 }
+                arr->size = initSize;
             }
         }
         

@@ -10,6 +10,14 @@ int main() {
     arr->insertAt(1);
     arr->insertAt(3);
     arr->insertAt(6);
+    arr->insertAt(6);
+    arr->insertAt(6);
+    arr->insertAt(6);
+    arr->insertAt(6);
+    arr->insertAt(6);
+    arr->insertAt(0);
+    arr->insertAt(5);
+    arr->insertAt(6);
     arr->insertAt(4);
     arr->merge_sort(arr, 0, arr->getSize());
     arr->print();
