@@ -55,10 +55,75 @@ class dynamicArray {
             return m;
         }
 
+        dynamicArray<T>* buildArrForMSort(dynamicArray<T>* arr, int start, int finish) {
+            dynamicArray<T>* newArr = new dynamicArray<T>;
+            for (int i = start; i < finish; i++) {
+                newArr->append(arr->getAt(i));
+            }
+            newArr->print();
+            cout << "<---->\n";
+            return newArr;
+        }
+
 	public:
 		dynamicArray(int initCap = 0) : capacity(initCap) {
 			array = new T[capacity];
 		}
+
+        /* sorting algorithms */
+        
+        void selection_sort() {
+            for (int i = size-1; i >= 0; i--) {
+                int max = i;
+                for (int j = 0; j < i; j++) {
+                    if (array[max] < array[j]) { max = j; }
+                }
+                // swap
+                T temp = array[max];
+                array[max] = array[i];
+                array[i] = temp;
+            }
+        }
+
+        void insertion_sort() {
+            for (int i = 1; i < size; i++) {
+                int j = i;
+                while (j > 0 && array[j] < array[j-1]) {
+                    // swap
+                    T temp = array[j];
+                    array[j] = array[j-1];
+                    array[j-1] = temp;
+                    j--;
+                }
+            }
+        }
+
+        void merge_sort(dynamicArray<T>* arr, int a, int b) {
+            //if (arr == nullptr) { arr = array; }
+            //if (b == -999) { b = arr.getSize(); }
+            if (1 < b-a) {
+                int c = (a + b + 1) / 2;
+                merge_sort(arr, a, c);
+                merge_sort(arr, c, b);
+                dynamicArray<T>* L = buildArrForMSort(arr, a, c); // A[a:c]
+                dynamicArray<T>* R = buildArrForMSort(arr, c+1, b); // A[c:b]
+                 
+                int i = 0;
+                int j = 0;
+                while (a < b) {
+                    if ((j >= R->getSize()) || (i < arr->getSize() && L->getAt(i) < R->getAt(j))) {
+                        arr[a] = L[i];
+                        i++;
+                    } else {
+                        arr[a] = R[j];
+                        j++;
+                    }
+                    a++;
+                }
+            }
+        }
+        
+        /* -------- end of sorting algorithms ----------*/
 
 		// copy constructor
 		dynamicArray(const dynamicArray& other)
@@ -130,6 +195,10 @@ class dynamicArray {
 			}
 			array[index] = element;
 			size++;
+		}
+
+		void insertAt(T element) {
+            this->append(element);
 		}
 
 		void insertFront(const T &element) {
