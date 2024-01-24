@@ -55,13 +55,11 @@ class dynamicArray {
             return m;
         }
 
-        dynamicArray<T>* buildArrForMSort(dynamicArray<T>* arr, int start, int finish) {
-            dynamicArray<T>* newArr = new dynamicArray<T>;
+        dynamicArray<T> buildArrForMSort(dynamicArray<T>* arr, int start, int finish) {
+            dynamicArray<T> newArr(finish-start);
             for (int i = start; i < finish; i++) {
-                newArr->append(arr->getAt(i));
+                newArr.append(arr->getAt(i));
             }
-            newArr->print();
-            cout << "<---->\n";
             return newArr;
         }
 
@@ -98,25 +96,29 @@ class dynamicArray {
             }
         }
 
-        void merge_sort(dynamicArray<T>* arr, int a, int b) {
-            //if (arr == nullptr) { arr = array; }
-            //if (b == -999) { b = arr.getSize(); }
-            if (1 < b-a) {
-                int c = (a + b + 1) / 2;
-                merge_sort(arr, a, c);
-                merge_sort(arr, c, b);
-                dynamicArray<T>* L = buildArrForMSort(arr, a, c); // A[a:c]
-                dynamicArray<T>* R = buildArrForMSort(arr, c+1, b); // A[c:b]
-                 
+        void merge_sort(dynamicArray<T>* arr, int a, int b = -1) {
+            if (b == -1) {
+                b = arr->getSize();
+            }
+
+            if (1 < (b-a)) {
+                int c = (a+b+1)/2;
+                merge_sort(arr, a, c); // sort the left half
+                merge_sort(arr, c, b); // sort the right half
+                dynamicArray<T> L = buildArrForMSort(arr, a, c);
+                dynamicArray<T> R = buildArrForMSort(arr, c, b);
+
                 int i = 0;
                 int j = 0;
+
                 while (a < b) {
-                    if ((j >= R->getSize()) || (i < arr->getSize() && L->getAt(i) < R->getAt(j))) {
-                        arr[a] = L[i];
+                    if ((j >= R.getSize()) || (i < L.getSize() && L.getAt(i) < R.getAt(j))) {
+                        arr->insertAt(L.getAt(i), a, false);
                         i++;
                     } else {
-                        arr[a] = R[j];
+                        arr->insertAt(R.getAt(j), a, false);
                         j++;
+                        cout << "j = " << j << endl;
                     }
                     a++;
                 }
@@ -184,11 +186,16 @@ class dynamicArray {
 			size++;
 		}
 
-		void insertAt(T element, size_t index) {
+		void insertAt(T element, size_t index, bool shifting = true) {
 			if (size == capacity) {
 				resize();
 			}
 
+            if (!shifting) {
+			    array[index] = element;
+                size++;
+                return;
+            }
             // shifting
 			for (size_t i = size; i > index; i--) {
 				array[i] = array[i-1];
