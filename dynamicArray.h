@@ -96,8 +96,7 @@ class dynamicArray {
             }
         }
 
-        void merge_sort(dynamicArray<T>* arr, int a, int b = -1) {
-            size_t initSize = arr->getSize();
+        void merge_sort(dynamicArray<T>* arr, int a, int b = -1) { size_t initSize = arr->getSize();
             if (b == -1) {
                 b = arr->getSize();
             }
@@ -187,20 +186,18 @@ class dynamicArray {
 			size++;
 		}
 
+        // the purpose of bool shifting is when you want the function to replace the value at the chosen index, instead of shifting
 		void insertAt(T element, size_t index, bool shifting = true) {
 			if (size == capacity) {
 				resize();
 			}
 
-            if (!shifting) {
-			    array[index] = element;
-                size++;
-                return;
+            if (shifting) {
+			    for (size_t i = size; i > index; i--) {
+			    	array[i] = array[i-1];
+			    }
             }
-            // shifting
-			for (size_t i = size; i > index; i--) {
-				array[i] = array[i-1];
-			}
+
 			array[index] = element;
 			size++;
 		}
