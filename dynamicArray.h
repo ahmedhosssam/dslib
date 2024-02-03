@@ -5,6 +5,7 @@
 #include <algorithm>
 #include <cassert>
 #include <stdexcept>
+#include <limits.h>
 using namespace std;
 
 /*
@@ -96,7 +97,8 @@ class dynamicArray {
             }
         }
 
-        void merge_sort(dynamicArray<T>* arr, int a, int b = -1) { size_t initSize = arr->getSize();
+        void merge_sort(dynamicArray<T>* arr, int a, int b = -1) {
+            size_t initSize = arr->getSize();
             if (b == -1) {
                 b = arr->getSize();
             }
@@ -123,6 +125,29 @@ class dynamicArray {
                 }
                 arr->size = initSize;
             }
+        }
+
+        // Note: Cannot handle duplicate keys
+        void direct_access_sort() {
+            size_t initsize = size;
+            int u = 1 + findMax();
+            T newarr[u];
+            for (int i = 0; i < u; i++) {
+                newarr[i] = INT_MIN;
+            }
+
+            for (int i = 0; i < size; i++) {
+                newarr[int(array[i])] = array[i];
+            }
+
+            int i = 0;
+            for (int j = 0; j < u; j++) {
+                if (newarr[j] != INT_MIN) {
+                    insertAt(newarr[j], i, false);
+                    i++;
+                }
+            }
+            size = initsize;
         }
         
         /* -------- end of sorting algorithms ----------*/
@@ -174,7 +199,6 @@ class dynamicArray {
 
 		T& operator[] (size_t i) const {
 			assert(i < size && i >= 0);
-
 			return array[i];
 		}
 
@@ -200,10 +224,6 @@ class dynamicArray {
 
 			array[index] = element;
 			size++;
-		}
-
-		void insertAt(T element) {
-            this->append(element);
 		}
 
 		void insertFront(const T &element) {
@@ -244,6 +264,16 @@ class dynamicArray {
 				resize();
 			}
 		}
+
+        T findMax() const {
+            T max = array[0];
+            for (int i = 0; i < size; i++) {
+                if (array[i] > max) {
+                    max = array[i];
+                }
+            }
+            return max;
+        }
 
 		~dynamicArray() {
 			delete[] array;

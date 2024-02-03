@@ -5,21 +5,21 @@ using namespace std;
 
 int main() {
     dynamicArray<int>* arr = new dynamicArray<int>;
-    arr->insertAt(5);
-    arr->insertAt(2);
-    arr->insertAt(1);
-    arr->insertAt(3);
-    arr->insertAt(6);
-    arr->insertAt(6);
-    arr->insertAt(6);
-    arr->insertAt(6);
-    arr->insertAt(6);
-    arr->insertAt(6);
-    arr->insertAt(0);
-    arr->insertAt(5);
-    arr->insertAt(6);
-    arr->insertAt(4);
-    arr->merge_sort(arr, 0, arr->getSize());
+    arr->append(5);
+    arr->append(2);
+    arr->append(1);
+    arr->append(3);
+    arr->append(6);
+    arr->append(6);
+    arr->append(6);
+    arr->append(6);
+    arr->append(6);
+    arr->append(66);
+    arr->append(0);
+    arr->append(5);
+    arr->append(6);
+    arr->append(4);
+    arr->direct_access_sort();
     arr->print();
     return 0;
 }
