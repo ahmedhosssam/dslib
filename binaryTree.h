@@ -16,7 +16,6 @@ private:
     Node* get_node(T key) {
         Node* ptr = root;
         while (ptr != nullptr) {
-            cout << " gg " << ptr->key << endl;
             if (key < ptr->key) {
                 ptr = ptr->left;
             } else if (ptr->key == key) {
@@ -40,32 +39,37 @@ private:
     }
 
     Node* find_first(Node* ptr) {
-        Node* p = ptr;
-        while (ptr != nullptr) {
-            ptr = ptr->left;
-        }
-        return p;
+        if (ptr->left) { return find_first(ptr->left); }
+        else { return ptr; }
+    }
+
+    Node* find_last(Node* ptr) {
+        if (ptr->right) { return find_last(ptr->right); }
+        else { return ptr; }
     }
 
     Node* find_successor(Node* ptr) {
+        if (ptr->right) {
+            return find_first(ptr);
+        }
+
         Node* p = ptr;
-        if (ptr->right != nullptr) {
-            p = find_first(ptr->right);
-        } else {
-            if (p->parent->parent != nullptr) {
-                p = p->parent->parent;
-            } else if (p->parent != nullptr) {
-                p = p->parent;
-            }
+        while (p->parent && p == p->parent->right) {
+            p = p->parent;
         }
         return p;
     }
 
     Node* find_predecessor(Node *ptr) {
-        if (ptr->left != nullptr) {
-            return ptr->left;
+        if (ptr->left) {
+            return find_last(ptr->left);
         }
-        return nullptr;
+
+        Node* p = ptr;
+        while (p->parent && p == p->parent->left) {
+            p = p->parent;
+        }
+        return p;
     }
 
 public:
