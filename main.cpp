@@ -1,6 +1,7 @@
 #include <iostream>
 #include "dynamicArray.h"
 #include "sortedDynamicArray.h"
+#include "binaryTree.h"
 using namespace std;
 
 int main() {
