@@ -72,6 +72,28 @@ private:
         return p;
     }
 
+    void insert_before(Node* b, Node* a) {
+        if (a->left) {
+            a = find_last(a);
+            a->right = b;
+            b->parent = a;
+        } else {
+            a->left = b;
+            b->parent = a;
+        }
+    }
+
+    void insert_after(Node* b, Node* a) {
+        if (a->right) {
+            a = find_first(a);
+            a->left = b;
+            b->parent = a;
+        } else {
+            a->right = b;
+            b->parent = a;
+        }
+    }
+
 public:
     T get_root() {
         if (n == 0) {
@@ -93,64 +115,34 @@ public:
         newNode->key = key;
         if (root == nullptr) {
             root = newNode;
-            n++;
-            return;
-        }
-        Node* ptr = root;
-        while (true) {
-            if (key < ptr->key) {
-                if (ptr->left == nullptr) {
-                    break;
-                } else {
-                    ptr = ptr->left;
-                }
+        } else {
+            if (key > root->key) {
+                insert_after(newNode, root);
             } else {
-                if (ptr->right == nullptr) {
-                    break;
-                } else {
-                    ptr = ptr->right;
-                }
+                insert_before(newNode, root);
             }
         }
-        newNode->parent = ptr;
-        ptr->left == nullptr ? ptr->left = newNode : ptr->right = newNode;
-        n++;
     }
 
     void remove(T key) {
         Node* ptr = get_node(key);
-        if (ptr == nullptr) {
-            cout << "[ " << key << " ] Not Found :/\n";
-            return;
-        }
-
-        // if node is a leaf
-        if (ptr->left == nullptr && ptr->right == nullptr) {
-            ptr = ptr->parent;
-            if (ptr->left->key == key) {
-                ptr->left = nullptr;
+        Node* p;
+        if (ptr->left || ptr->right) {
+            if (ptr->left) {
+                p = find_predecessor(ptr);
             } else {
-                ptr->right = nullptr;
+                p = find_successor(ptr);
             }
-        // so, it has a child
-        } else {
-            if (ptr->left != nullptr) {
-                Node* pp = ptr;
-                Node* pp1 = ptr;
-                while (find_predecessor(pp) != nullptr) {
-                    pp1 = pp;
-                    pp = find_predecessor(pp);
-                    T temp = pp1->key;
-                    pp1->key = pp->key;
-                    pp->key = temp;
-                }
-                T temp = pp->key;
-                pp = pp->parent;
-                if (pp->left->key == temp) {
-                    pp->left = nullptr;
-                } else {
-                    pp->right = nullptr;
-                }
+            T temp = p->key;
+            p->key = ptr->key;
+            ptr->key = temp;
+            return remove(p->key);
+        }
+        if (ptr->parent) {
+            if (ptr->parent->left == ptr) {
+                ptr->parent->left = nullptr;
+            } else {
+                ptr->parent->right = nullptr;
             }
         }
     }

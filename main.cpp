@@ -14,7 +14,7 @@ int main() {
     t->insert(7);
     t->insert(6);
     //t->remove(66);
-    t->remove(7);
+    //t->remove(7);
     t->print();
     return 0;
 }
